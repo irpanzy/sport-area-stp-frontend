@@ -51,6 +51,7 @@ export default function UserPage() {
         <Button
           onClick={() => {
             localStorage.removeItem("token");
+            toast.success("Anda telah logout");
             navigate("/login");
           }}
         >
