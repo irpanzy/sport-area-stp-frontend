@@ -21,10 +21,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
-const NavbarUser = ({
+const Navbar = ({
   logo = {
     url: "#top",
     src: "/images/logo.png",
@@ -33,32 +33,13 @@ const NavbarUser = ({
 
   menu = [
     { title: "Home", url: "#" },
-    { title: "Panduan", url: "#" },
-    {
-      title: "Sewa Lapangan",
-      url: "#",
-      items: [
-        {
-          title: "Basket",
-          description: "Lapangan basket outdoor siap digunakan.",
-          src: "/icons/basketball.svg",
-          className: "w-5 h-5",
-          url: "#",
-        },
-        {
-          title: "Futsal",
-          description: "Lapangan futsal outdoor nyaman dan luas.",
-          src: "/icons/soccer-ball.svg",
-          className: "w-5 h-5",
-          url: "#",
-        },
-      ],
-    },
-    { title: "Laporan", url: "#" },
+    { title: "Fasilitas", url: "#" },
+    { title: "Jam Operasional", url: "#" },
+    { title: "Kontak Kami", url: "#" },
   ],
 
   auth = {
-    logout: { title: "Logout", url: "#" },
+    login: { title: "Login", url: "#" },
   },
 }) => {
   const navigate = useNavigate();
@@ -66,40 +47,37 @@ const NavbarUser = ({
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      toast.error("Token tidak ditemukan");
-      navigate("/login");
-      return;
-    }
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const isExpired = Date.now() > payload.exp * 1000;
 
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const isExpired = Date.now() > payload.exp * 1000;
+        if (isExpired) {
+          localStorage.removeItem("token");
+          return;
+        }
 
-      if (isExpired) {
-        toast.error("Token kadaluarsa");
+        toast.warning(
+          "Anda tidak bisa mengakses halaman ini. Silakan logout terlebih dahulu."
+        );
+
+        if (payload.role === "admin") {
+          navigate("/admin");
+        } else if (payload.role === "user") {
+          navigate("/users");
+        } else {
+          localStorage.removeItem("token");
+          toast.error("Role tidak dikenali. Silakan login ulang.");
+          navigate("/login");
+        }
+      } catch {
         localStorage.removeItem("token");
+        toast.error("Token tidak valid. Silakan login ulang.");
         navigate("/login");
-        return;
       }
-
-      if (payload.role === "admin") {
-        toast.error("Anda tidak memiliki akses ke halaman ini");
-        navigate("/admin");
-        return;
-      }
-
-      if (payload.role !== "user") {
-        toast.error("Akses tidak diizinkan");
-        navigate("/login");
-        return;
-      }
-    } catch {
-      toast.error("Token tidak valid");
-      localStorage.removeItem("token");
-      navigate("/login");
     }
   }, [navigate]);
+
   return (
     <section className="py-4">
       <div className="mx-auto w-full max-w-7xl px-4">
@@ -113,7 +91,7 @@ const NavbarUser = ({
                 {logo.title}
               </span>
             </a>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
                   {menu.map((item) => renderMenuItem(item))}
@@ -126,12 +104,10 @@ const NavbarUser = ({
               variant="outline"
               size="sm"
               onClick={() => {
-                localStorage.removeItem("token");
-                toast.success("Anda telah logout");
                 navigate("/login");
               }}
             >
-              {auth.logout.title}
+              {auth.login.title}
             </Button>
           </div>
         </nav>
@@ -165,11 +141,11 @@ const NavbarUser = ({
                       variant="outline"
                       onClick={() => {
                         localStorage.removeItem("token");
-                        toast.success("Anda telah logout");
+                        toast.success("Anda telah login");
                         navigate("/login");
                       }}
                     >
-                      {auth.logout.title}
+                      {auth.login.title}
                     </Button>
                   </div>
                 </div>
@@ -185,16 +161,14 @@ const NavbarUser = ({
 const renderMenuItem = (item) => {
   if (item.items) {
     return (
-      <NavigationMenuItem key={item.title} className="relative">
+      <NavigationMenuItem key={item.title}>
         <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-        <NavigationMenuContent className="left-0 bg-popover text-popover-foreground">
-          <div className="w-[300px] flex flex-col gap-2 p-2">
-            {item.items.map((subItem) => (
-              <NavigationMenuLink asChild key={subItem.title}>
-                <SubMenuLink item={subItem} />
-              </NavigationMenuLink>
-            ))}
-          </div>
+        <NavigationMenuContent className="bg-popover text-popover-foreground">
+          {item.items.map((subItem) => (
+            <NavigationMenuLink asChild key={subItem.title} className="w-80">
+              <SubMenuLink item={subItem} />
+            </NavigationMenuLink>
+          ))}
         </NavigationMenuContent>
       </NavigationMenuItem>
     );
@@ -238,27 +212,20 @@ const renderMobileMenuItem = (item) => {
 const SubMenuLink = ({ item }) => {
   return (
     <a
-      className="flex items-start gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
+      className="flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
       href={item.url}
     >
-      {/* Icon */}
-      {item.src && (
-        <img
-          src={item.src}
-          alt={`${item.title} icon`}
-          className={item.className || "w-5 h-5"}
-        />
-      )}
-
-      {/* Title & description */}
-      <div className="space-y-1">
+      <div className="text-foreground">{item.icon}</div>
+      <div>
         <div className="text-sm font-semibold">{item.title}</div>
         {item.description && (
-          <p className="text-sm text-muted-foreground">{item.description}</p>
+          <p className="text-sm leading-snug text-muted-foreground">
+            {item.description}
+          </p>
         )}
       </div>
     </a>
   );
 };
 
-export { NavbarUser };
+export { Navbar };
