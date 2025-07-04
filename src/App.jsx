@@ -16,6 +16,7 @@ import Basket from "./components/users/Basket";
 import Futsal from "./components/users/Futsal";
 import Laporan from "./components/users/Laporan";
 import UsersHome from "./components/users/HomeUser";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -34,7 +35,9 @@ function App() {
           <Route path="sewa-lapangan-futsal" element={<Futsal />} />
           <Route path="laporan" element={<Laporan />} />
         </Route>
-        <Route path="*" element={<Navigate to="/" />} />
+
+        {/* Halaman 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
