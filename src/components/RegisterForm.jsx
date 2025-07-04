@@ -54,10 +54,10 @@ export function RegisterForm({ className, ...props }) {
                 </p>
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="name">Nama</Label>
+                <Label htmlFor="name">Nama Lengkap</Label>
                 <Input
                   required
-                  placeholder="Nama"
+                  placeholder="Irfan Muria"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -66,7 +66,7 @@ export function RegisterForm({ className, ...props }) {
                 <Label htmlFor="phone">No. Handphone</Label>
                 <Input
                   required
-                  placeholder="No. Handphone"
+                  placeholder="087875161921"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -75,7 +75,7 @@ export function RegisterForm({ className, ...props }) {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   required
-                  placeholder="Email"
+                  placeholder="irfanmuria04@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />

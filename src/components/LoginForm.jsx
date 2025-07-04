@@ -88,7 +88,7 @@ export function LoginForm({ className, ...props }) {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   required
-                  placeholder="Email"
+                  placeholder="irfanmuria04@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
