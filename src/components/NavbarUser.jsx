@@ -35,7 +35,26 @@ const NavbarUser = ({
   menu = [
     { title: "Home", url: "#" },
     { title: "Panduan", url: "#" },
-    { title: "Reservasi Lapangan", url: "#" },
+    {
+      title: "Sewa Lapangan",
+      url: "#",
+      items: [
+        {
+          title: "Basket",
+          description: "Lapangan basket outdoor siap digunakan.",
+          src: "/icons/basketball.svg",
+          className: "w-5 h-5",
+          url: "#",
+        },
+        {
+          title: "Futsal",
+          description: "Lapangan futsal outdoor nyaman dan luas.",
+          src: "/icons/soccer-ball.svg",
+          className: "w-5 h-5",
+          url: "#",
+        },
+      ],
+    },
     { title: "Laporan", url: "#" },
   ],
 
@@ -95,7 +114,7 @@ const NavbarUser = ({
                 {logo.title}
               </span>
             </a>
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
               <NavigationMenu>
                 <NavigationMenuList>
                   {menu.map((item) => renderMenuItem(item))}
@@ -167,14 +186,16 @@ const NavbarUser = ({
 const renderMenuItem = (item) => {
   if (item.items) {
     return (
-      <NavigationMenuItem key={item.title}>
+      <NavigationMenuItem key={item.title} className="relative">
         <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-        <NavigationMenuContent className="bg-popover text-popover-foreground">
-          {item.items.map((subItem) => (
-            <NavigationMenuLink asChild key={subItem.title} className="w-80">
-              <SubMenuLink item={subItem} />
-            </NavigationMenuLink>
-          ))}
+        <NavigationMenuContent className="left-0 bg-popover text-popover-foreground">
+          <div className="w-[300px] flex flex-col gap-2 p-2">
+            {item.items.map((subItem) => (
+              <NavigationMenuLink asChild key={subItem.title}>
+                <SubMenuLink item={subItem} />
+              </NavigationMenuLink>
+            ))}
+          </div>
         </NavigationMenuContent>
       </NavigationMenuItem>
     );
@@ -218,16 +239,23 @@ const renderMobileMenuItem = (item) => {
 const SubMenuLink = ({ item }) => {
   return (
     <a
-      className="flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
+      className="flex items-start gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
       href={item.url}
     >
-      <div className="text-foreground">{item.icon}</div>
-      <div>
+      {/* Icon */}
+      {item.src && (
+        <img
+          src={item.src}
+          alt={`${item.title} icon`}
+          className={item.className || "w-5 h-5"}
+        />
+      )}
+
+      {/* Title & description */}
+      <div className="space-y-1">
         <div className="text-sm font-semibold">{item.title}</div>
         {item.description && (
-          <p className="text-sm leading-snug text-muted-foreground">
-            {item.description}
-          </p>
+          <p className="text-sm text-muted-foreground">{item.description}</p>
         )}
       </div>
     </a>
