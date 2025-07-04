@@ -43,8 +43,16 @@ export default function HomeUser() {
 
       const data = res.data.bookings || [];
 
+      const now = new Date();
+
       const approved = data
         .filter((b) => b.status === "approved")
+        .filter((b) => {
+          const bookingDate = new Date(b.date);
+          const [hourStr, minuteStr] = b.time_slot.split(":"); // Misal "17:00"
+          bookingDate.setHours(parseInt(hourStr), parseInt(minuteStr), 0, 0);
+          return bookingDate >= now;
+        })
         .map((b) => ({
           nama: b.user?.name || "Pengguna",
           tanggal: new Date(b.date).toLocaleDateString("id-ID", {
@@ -113,8 +121,17 @@ export default function HomeUser() {
                   ))
                 ) : visibleBookings.length === 0 ? (
                   <tr>
-                    <td colSpan="3" className="text-center py-4 text-gray-500">
-                      Belum ada booking
+                    <td colSpan="3" className="text-center py-6">
+                      <div className="flex flex-col items-center justify-center gap-3">
+                        <img
+                          src="/icons/empty-booking.svg"
+                          alt="Kosong"
+                          className="w-40 h-40 opacity-80 animate-bounce-slow"
+                        />
+                        <p className="text-muted-foreground text-sm">
+                          Belum ada jadwal booking untuk lapangan ini.
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 ) : (
