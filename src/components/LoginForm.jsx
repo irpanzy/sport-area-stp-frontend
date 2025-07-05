@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { Lock, Mail } from "lucide-react";
 
 export function LoginForm({ className, ...props }) {
   const [email, setEmail] = useState("");
@@ -54,10 +55,10 @@ export function LoginForm({ className, ...props }) {
       if (Date.now() > exp) {
         toast.error("Token sudah expired");
         return;
-      }
+      }0
 
       localStorage.setItem("token", token);
-      toast.success("Login berhasil");
+      toast.success("Berhasil masuk ke akun");
 
       if (user?.role === "admin") {
         navigate("/admin");
@@ -68,7 +69,7 @@ export function LoginForm({ className, ...props }) {
       }
     } catch (error) {
       const msg =
-        error.response?.data?.message || "Terjadi kesalahan saat login";
+        error.response?.data?.message || "Terjadi kesalahan saat masuk";
       toast.error(msg);
     }
   };
@@ -84,30 +85,52 @@ export function LoginForm({ className, ...props }) {
                   Masuk ke akun STP Sport Area Anda
                 </p>
               </div>
-              <div className="grid gap-3">
+
+              {/* Email */}
+              <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  required
-                  placeholder="irfanmuria04@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className="relative">
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    id="email"
+                    required
+                    placeholder="irfanmuria04@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
+
+              {/* Password */}
+              <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  required
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    id="password"
+                    required
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
+
               <Button type="submit" className="w-full cursor-pointer">
                 Masuk
               </Button>
+
               <div className="text-center text-sm">
-                Sudah punya akun?{" "}
+                Belum punya akun?{" "}
                 <a href="/register" className="underline underline-offset-4">
                   Daftar
                 </a>

@@ -39,7 +39,8 @@ const Navbar = ({
   ],
 
   auth = {
-    login: { title: "Login", url: "#" },
+    login: { title: "Masuk", url: "#" },
+    register: { title: "Daftar", url: "#" },
   },
 }) => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const Navbar = ({
         }
 
         toast.warning(
-          "Anda tidak bisa mengakses halaman ini. Silakan logout terlebih dahulu."
+          "Anda tidak bisa mengakses halaman ini. Silakan keluar terlebih dahulu."
         );
 
         if (payload.role === "admin") {
@@ -67,12 +68,12 @@ const Navbar = ({
           navigate("/users");
         } else {
           localStorage.removeItem("token");
-          toast.error("Role tidak dikenali. Silakan login ulang.");
+          toast.error("Role tidak dikenali. Silakan masuk kembali.");
           navigate("/login");
         }
       } catch {
         localStorage.removeItem("token");
-        toast.error("Token tidak valid. Silakan login ulang.");
+        toast.error("Token tidak valid. Silakan masuk kembali.");
         navigate("/login");
       }
     }
@@ -102,12 +103,19 @@ const Navbar = ({
           <div className="flex gap-2">
             <Button
               variant="outline"
-              size="sm"
               onClick={() => {
                 navigate("/login");
               }}
             >
               {auth.login.title}
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => {
+                navigate("/register");
+              }}
+            >
+              {auth.register.title}
             </Button>
           </div>
         </nav>
@@ -140,12 +148,18 @@ const Navbar = ({
                     <Button
                       variant="outline"
                       onClick={() => {
-                        localStorage.removeItem("token");
-                        toast.success("Anda telah login");
                         navigate("/login");
                       }}
                     >
                       {auth.login.title}
+                    </Button>
+                    <Button
+                      variant="default"
+                      onClick={() => {
+                        navigate("/register");
+                      }}
+                    >
+                      {auth.register.title}
                     </Button>
                   </div>
                 </div>

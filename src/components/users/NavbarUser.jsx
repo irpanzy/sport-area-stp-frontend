@@ -57,7 +57,7 @@ const NavbarUser = ({
   ],
 
   auth = {
-    logout: { title: "Logout", url: "#" },
+    logout: { title: "Keluar", url: "#" },
   },
 }) => {
   const navigate = useNavigate();
@@ -124,10 +124,9 @@ const NavbarUser = ({
           <div className="flex gap-2">
             <Button
               variant="outline"
-              size="sm"
               onClick={() => {
                 localStorage.removeItem("token");
-                toast.success("Anda telah logout");
+                toast.success("Anda berhasil keluar dari akun");
                 navigate("/login");
               }}
             >
@@ -164,7 +163,7 @@ const NavbarUser = ({
                       variant="outline"
                       onClick={() => {
                         localStorage.removeItem("token");
-                        toast.success("Anda telah logout");
+                        toast.success("Anda berhasil keluar dari akun");
                         navigate("/login");
                       }}
                     >

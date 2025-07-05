@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { Lock, Mail, Smartphone, User } from "lucide-react";
 
 export function RegisterForm({ className, ...props }) {
   const [phone, setPhone] = useState("");
@@ -26,11 +27,13 @@ export function RegisterForm({ className, ...props }) {
         name,
       });
 
-      toast.success("Berhasil register, silakan login");
+      toast.success(
+        "Pendaftaran berhasil dilakukan. Silakan masuk ke akun Anda."
+      );
       navigate("/login");
     } catch (error) {
       const msg =
-        error?.response?.data?.message || "Gagal register. Silakan coba lagi.";
+        error?.response?.data?.message || "Gagal daftar. Silakan coba lagi.";
       toast.error(msg);
     }
   };
@@ -53,46 +56,88 @@ export function RegisterForm({ className, ...props }) {
                   Daftar untuk mulai menggunakan STP Sport Area
                 </p>
               </div>
-              <div className="grid gap-3">
+
+              {/* Nama Lengkap */}
+              <div className="grid gap-2">
                 <Label htmlFor="name">Nama Lengkap</Label>
-                <Input
-                  required
-                  placeholder="Irfan Muria"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <div className="relative">
+                  <User
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    id="name"
+                    required
+                    placeholder="Irfan Muria"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
+
+              {/* Nomor HP */}
+              <div className="grid gap-2">
                 <Label htmlFor="phone">No. Handphone</Label>
-                <Input
-                  required
-                  placeholder="087875161921"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
+                <div className="relative">
+                  <Smartphone
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    id="phone"
+                    required
+                    placeholder="087875161921"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
+
+              {/* Email */}
+              <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  required
-                  placeholder="irfanmuria04@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className="relative">
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    id="email"
+                    required
+                    placeholder="irfanmuria04@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
+
+              {/* Password */}
+              <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  required
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    id="password"
+                    required
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </div>
+
               <Button type="submit" className="w-full cursor-pointer">
                 Daftar
               </Button>
+
               <div className="text-center text-sm">
                 Sudah punya akun?{" "}
                 <a href="/login" className="underline underline-offset-4">
